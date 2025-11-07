@@ -1,0 +1,158 @@
+.login-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card {
+  background: var(--white);
+  padding: 2.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+.login-card h1 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+
+.login-subtitle {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+.login-form {
+  margin-bottom: 1.5rem;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  text-align: center;
+  border: 1px solid #ffcdd2;
+}
+
+.login-switch {
+  text-align: center;
+  color: var(--text-light);
+}
+
+.switch-button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.switch-button:hover {
+  color: var(--secondary-color);
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+    margin: 0 1rem;
+  }
+}
+
+.social-login {
+  margin-bottom: 1.5rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: var(--text-light);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.divider span {
+  padding: 0 1rem;
+}
+.social-login {
+  margin-bottom: 2rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 2rem 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.divider span {
+  padding: 0 1rem;
+  background: var(--white);
+  color: var(--text-light);
+}
+
+/* Alternative social login options */
+.social-login-options {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.social-btn:hover {
+  background: #f8f9fa;
+  border-color: #ccc;
+}
+
+.social-btn.google {
+  border-color: #dadce0;
+}
+
+.social-btn.facebook {
+  border-color: #1877f2;
+  color: #1877f2;
+}
+
+.social-btn.facebook:hover {
+  background: #f0f2f5;
+}

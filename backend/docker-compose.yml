@@ -1,0 +1,107 @@
+services:
+  # Single MongoDB instance for all services
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: mern_auth
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - blog-network
+
+  # Microservices
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      MONGO_URI: mongodb://mongodb:27017/mern_auth
+      DB_NAME: users_db
+      JWT_SECRET: your-super-secret-jwt-key
+      JWT_REFRESH_SECRET: your-super-secret-refresh-key
+      SESSION_SECRET: your-session-secret
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_REDIRECT_URI: http://localhost:3000/api/v1/auth/google/callback
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      - mongodb
+    networks:
+      - blog-network
+    restart: unless-stopped
+
+  post-service:
+    build: ./post-service
+    container_name: post-service
+    ports:
+      - "3002:3002"
+    environment:
+      NODE_ENV: development
+      PORT: 3002
+      MONGO_URI: mongodb://mongodb:27017/mern_auth
+      DB_NAME: posts_db
+      JWT_SECRET: your-super-secret-jwt-key
+      USER_SERVICE_URL: http://user-service:3001
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      - mongodb
+      - user-service
+    networks:
+      - blog-network
+    restart: unless-stopped
+
+  comment-service:
+    build: ./comment-service
+    container_name: comment-service
+    ports:
+      - "3003:3003"
+    environment:
+      NODE_ENV: development
+      PORT: 3003
+      MONGO_URI: mongodb://mongodb:27017/mern_auth
+      DB_NAME: comments_db
+      JWT_SECRET: your-super-secret-jwt-key
+      USER_SERVICE_URL: http://user-service:3001
+      POST_SERVICE_URL: http://post-service:3002
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      - mongodb
+      - user-service
+      - post-service
+    networks:
+      - blog-network
+    restart: unless-stopped
+
+  api-gateway:
+    build: ./gateway
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      USER_SERVICE_URL: http://user-service:3001
+      POST_SERVICE_URL: http://post-service:3002
+      COMMENT_SERVICE_URL: http://comment-service:3003
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      - user-service
+      - post-service
+      - comment-service
+    networks:
+      - blog-network
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+
+networks:
+  blog-network:
+    driver: bridge
